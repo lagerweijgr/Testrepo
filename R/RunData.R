@@ -1,11 +1,7 @@
 ## Load all packages
 lapply(c("phybreak", "coda", "gplots", "phytools", "igraph","seqinr"), require, character.only = TRUE)
 
-
-# setwd("C:/Users/lager008/OneDrive - Universiteit Utrecht/Phylobreak")
-setwd("C:/Users/lager008//Testrepo/")
-
-genetic.data <- read.dna(file = "Syn_geneticData3.fasta" , format = "fasta")
+genetic.data <- read.dna(file = "../data/Syn_geneticData3.fasta" , format = "fasta")
 distance<- dist.dna(genetic.data, model = "N", as.matrix = TRUE) 
 heatmap.2(distance, trace = "none", key.xlab = "Number of SNPs")
 
@@ -132,28 +128,13 @@ summary(mcmc[,c("mS")])
 
 transtree(MCMC_state, method = "mpc")
 
-## Show all infectors of Farm 8a, and their support
-infectorsets(MCMC_state, which.hosts = "F8a")
+## Show all infectors of Farm Utrecht, and their support
+infectorsets(MCMC_state, which.hosts = "Utrecht")
 
 plotTrans(MCMC_state, plot.which = "mpc", samplenr = 6)
 
 ## Plot the phylogenetic tree with maximum parent credibility
 plotPhylo(MCMC_state, plot.which = "mpc", samplenr = 0)
 
-
 plotPhyloTrans(MCMC_state, plot.which = "mpc")
 
-## Select three colorblind friendly colors
-colors <- c("#000000", "#E69F00", "#56B4E9")
-
-## Color the farms (hosts) according to the genetic clusters.
-host.color <- sapply(unique(data.object$sample.hosts), function(n){
-  cluster <- metadata$gen.cluster[metadata$farm == n][1]
-  if (cluster == "A") color <- colors[1]
-  else if (cluster == "B") color <- colors[2]
-  else if (cluster == "D") color <- colors[3]
-  return(color)
-})
-
-## Plot the transmission tree (the MPC tree) for which the labels are colored.
-plotTrans(MCMC_state, plot.which = "mpc", label.col = host.color)
