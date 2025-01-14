@@ -1,5 +1,3 @@
 # Testrepo
  
-This is a line I'm adding offline to my local copy. 
-
-This is a line I’m adding from GitHub.com.
+Work in progress on clustering sequence data 
