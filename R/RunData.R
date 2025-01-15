@@ -1,34 +1,43 @@
 ## Load all packages
-lapply(c("phybreak", "coda", "gplots", "phytools", "igraph", "seqinr",
-         "gengraph", "adegenet"), require, character.only = TRUE)
+install.packages("gengraph")
+lapply(c("phybreak", "coda", "gplots", "phytools", "igraph", "seqinr", "gengraph", "adegenet"), require, character.only = TRUE)
 genetic_data <- read.dna(file = "../data/syn_geneticData3.fasta",
                          format = "fasta")
-distance <- dist.dna(genetic.data, model = "N", as.matrix = TRUE)
+distance <- dist.dna(genetic_data, model = "N", as.matrix = TRUE)
 heatmap.2(distance, trace = "none", key.xlab = "Number of SNPs")
 
 plot(density(distance))
 
-make_cluster <- function(data_dist, c.thres) {
+make_cluster <- function(data_dist, c_thres) {
+  if(c_thres<0) {
+    stop("The chosen threshold can not be negative ")
+  } else
+  {
   hist(data_dist[upper.tri(data_dist, diag = FALSE)])
   clusters <- gengraph(data_dist, cutoff = c.thres)
   clusters
   clusters$graph
   plot(clusters$graph)
-  names(clusters$clust$membership[clusters$clus$membership == 1])
-  names(clusters$clust$membership[clusters$clus$membership == 4])
+  }
   return(clusters)
 } 
 
 make_subcluster <- function(cl_data, mem_number, seq_data) {
+  if(mem_number>max(cl_data$clust$membership)) {
+    stop("The chosen cluster does not exist")
+  } else
+  {
+
   id1 <- c(labels(cl_data$clust$membership[cl_data$clust$membership == mem_number]))
   id2 <- match(id1, labels(seq_data))
   sub_cluster <- seq_data[c(id2), ]
+  }
   return(sub_cluster)
 }
 
 cl_seq <- make_cluster(distance, 20)
 cl_seq
-cl_group <- make_subcluster(cl_seq, mem_number = 3, genetic_data)
+cl_group <- make_subcluster(cl_seq, mem_number = 15, genetic_data)
 
 
 distance_subcluster <- dist.dna(cl_group, model = "N", as.matrix = TRUE)
