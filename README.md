@@ -15,8 +15,6 @@ The project structure distinguishes three kinds of folders:
 - docs 
 
 
-## Add a citation file
-Create a citation file for your repository using [cffinit](https://citation-file-format.github.io/cff-initializer-javascript/#/)
 
 ## License
 
